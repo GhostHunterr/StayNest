@@ -9,15 +9,19 @@
 
 <body>
     <h1>All Listings</h1>
+    
+    <form method="get" action="/listings/new">
+        <button type="submit">Create a New Listing.</button>
+    </form>
+
     <ul>
         <% for (const listing of data) {%>
             <li>
-                <a href="/listings/<%=listing._id%>">
+                <a href="/listings/<%= listing._id %>">
                     <%=listing.title%>
                 </a>
             </li>
-            <% } %>
-
+        <% } %>
     </ul>
 </body>
 
