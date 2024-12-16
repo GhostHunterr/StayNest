@@ -1,28 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout("layouts/boilerplate") %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StayNest</title>
-</head>
+    <body>
+        <h1>All Listings</h1>
 
-<body>
-    <h1>All Listings</h1>
-    
-    <form method="get" action="/listings/new">
-        <button type="submit">Create a New Listing.</button>
-    </form>
+        <form method="get" action="/listings/new">
+            <button type="submit">Create a New Listing.</button>
+        </form>
 
-    <ul>
-        <% for (const listing of data) {%>
-            <li>
-                <a href="/listings/<%= listing._id %>">
-                    <%=listing.title%>
-                </a>
-            </li>
-        <% } %>
-    </ul>
-</body>
-
-</html>
+        <ul>
+            <% for (const listing of data) {%>
+                <li>
+                    <a href="/listings/<%= listing._id %>">
+                        <%=listing.title%>
+                    </a>
+                </li>
+                <% } %>
+        </ul>
+    </body>

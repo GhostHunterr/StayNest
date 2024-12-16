@@ -1,33 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StayNest</title>
-</head>
-<body>
-    <h3>Create a new Listing.</h3>
+<% layout("/layouts/boilerplate") %>
 
-    <form method="post" action="/listings">
-        <input type="text" name="listing[title]" placeholder="Enter Description.">
-        <br/>
-        <br/>
-        <textarea name="listing[description]" id=""></textarea>
-        <br/>
-        <br/>
-        <input type="text" name="listing[image]" placeholder="Enter Image url.">
-        <br/>
-        <br/>
-        <input type="text" name="listing[price]" placeholder="Enter Price.">
-        <br/>
-        <br/>
-        <input type="text" name="listing[location]" placeholder="Enter Location.">
-        <br/>
-        <br/>
-        <input type="text" name="listing[country]" placeholder="Enter Country.">
-        <br/>
-        <br/>
-        <button type="submit">Submit</button>
-    </form>
-</body>
-</html>
+    <body>
+        <a href="/listings">Home</a>
+
+        <h3>Create a new Listing.</h3>
+
+        <form method="post" action="/listings">
+            <input type="text" name="listing[title]" placeholder="Enter Description.">
+            <br />
+            <br />
+            <textarea name="listing[description]" id=""></textarea>
+            <br />
+            <br />
+            <input type="text" name="listing[image]" placeholder="Enter Image url.">
+            <br />
+            <br />
+            <input type="text" name="listing[price]" placeholder="Enter Price.">
+            <br />
+            <br />
+            <input type="text" name="listing[location]" placeholder="Enter Location.">
+            <br />
+            <br />
+            <input type="text" name="listing[country]" placeholder="Enter Country.">
+            <br />
+            <br />
+            <button type="submit">Submit</button>
+        </form>
+    </body>
