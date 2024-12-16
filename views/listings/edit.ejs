@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayNest</title>
+</head>
+
+<body>
+    <h3> Edit your Listing.</h3>
+
+    <form method="post" action="/listings/<%=listing._id %>?_method=PUT">
+        <input type="text" name="listing[title]" value="<%= listing.title %>" placeholder="Enter Description.">
+        <br />
+        <br />
+        <textarea name="listing[description]" ><%= listing.description %></textarea>
+        <br />
+        <br />
+        <input type="text" name="listing[image]" value="<%= listing.image %>" placeholder="Enter Image url.">
+        <br />
+        <br />
+        <input type="text" name="listing[price]" value="<%= listing.price %>" placeholder="Enter Price.">
+        <br />
+        <br />
+        <input type="text" name="listing[location]" value="<%= listing.location %>" placeholder="Enter Location.">
+        <br />
+        <br />
+        <input type="text" name="listing[country]" value="<%= listing.country %>" placeholder="Enter Country.">
+        <br />
+        <br />
+        <button type="submit">Submit</button>
+    </form>
+</body>
+
+</html>
