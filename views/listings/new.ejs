@@ -4,17 +4,21 @@
         <div class="row">
             <div class="col-8 offset-2">
                 <h3 class="mt-3">Create a new Listing.</h3>
-                <form method="post" action="/listings">
+                <form method="post" action="/listings" class="needs-validation" novalidate>
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
                         <input type="text" name="listing[title]" placeholder="Add a catchy title..."
-                            class="form-control">
+                            class="form-control" required>
+                        <div class="valid-feedback">Looks awesome! Your title is catchy.</div>
+                        <div class="invalid-feedback">Oops! Don't forget to add a title.</div>
                     </div>
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea name="listing[description]" class="form-control"
-                            placeholder="Description..."></textarea>
+                        <textarea name="listing[description]" class="form-control" placeholder="Description..."
+                            required></textarea>
+                        <div class="valid-feedback">Great! Your description is spot-on.</div>
+                        <div class="invalid-feedback">Uh-oh! A description is needed to tell your story.</div>
                     </div>
 
                     <div class="mb-3">
@@ -26,21 +30,29 @@
                     <div class="row">
                         <div class="mb-3 col-md-4">
                             <label for="price" class="form-label">Price</label>
-                            <input type="text" name="listing[price]" placeholder="$1200" class="form-control">
+                            <input type="text" name="listing[price]" placeholder="$1200" class="form-control" required>
+                            <div class="valid-feedback">Perfect! The price looks great.</div>
+                            <div class="invalid-feedback">Oh no! Add a price to make this listing complete.</div>
                         </div>
 
                         <div class="mb-3 col-md-8">
                             <label for="country" class="form-label">Country</label>
-                            <input type="text" name="listing[country]" placeholder="Canada" class="form-control">
+                            <input type="text" name="listing[country]" placeholder="Canada" class="form-control"
+                                required>
+                            <div class="valid-feedback">Great! The country fits perfectly.</div>
+                            <div class="invalid-feedback">Hmm, a country is important for this listing.</div>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="location" class="form-label">Location</label>
-                        <input type="text" name="listing[location]" placeholder="Toronto, Ontario" class="form-control">
+                        <input type="text" name="listing[location]" placeholder="Toronto, Ontario" class="form-control"
+                            required>
+                        <div class="valid-feedback">Fantastic! The location is spot-on.</div>
+                        <div class="invalid-feedback">Whoops! A location is essential to guide buyers.</div>
                     </div>
 
-                    <button type="submit" class="btn btn-dark add-btn mt-3">Submit</button>
+                    <button type="submit" class="btn btn-dark add-btn mt-3">Add</button>
 
                 </form>
             </div>
