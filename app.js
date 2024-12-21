@@ -6,7 +6,7 @@ const methodOverride = require("method-override");
 const ejsMate = require('ejs-mate');
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const { wrap } = require("module");
+const listingSchema = require("./schema.js")
 
 const app = express();
 const PORT = 8080;
@@ -30,6 +30,17 @@ main()
 async function main() {
     await mongoose.connect(MONGO_URL);
 }
+
+const validateListing = (req, res, next) => {
+    let { error } = listingSchema.validate(req.body);
+    console.log(req.body); 
+    if (error) {
+        let errMssg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400, errMssg);
+    } else {
+        next();
+    }
+};
 
 //Root
 app.get("/", (req, res) => {
@@ -58,11 +69,8 @@ app.get("/listings/:id", wrapAsync(async (req, res) => {
 }));
 
 //Create Route
-app.post("/listings", wrapAsync(async (req, res, next) => {
+app.post("/listings", validateListing, wrapAsync(async (req, res, next) => {
     //sending data as a key-value pair.
-    if (!req.body.listing) {
-        throw new ExpressError(400, "Invalid Listing Data.");
-    }
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings");
@@ -76,10 +84,7 @@ app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
 }));
 
 //Update Route
-app.put("/listings/:id", wrapAsync(async (req, res) => {
-    if (!req.body.listing) {
-        throw new ExpressError(400, "Invalid Listing Data.");
-    }
+app.put("/listings/:id", validateListing, wrapAsync(async (req, res) => {
     const { id } = req.params;
     const listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
     res.redirect(`/listings/${id}`);
@@ -92,13 +97,15 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
     res.redirect("/listings");
 }));
 
+//404 Route
 app.all("*", (req, res, next) => {
     next(new ExpressError(404, "Page Not Found."));
 });
 
+//Error MiddleWare
 app.use((err, req, res, next) => {
-    let { statusCode = 500, message = "Something Went Wrong!" } = err;
-    res.status(statusCode).send(message)
+    // let { statusCode = 500, message = "Something Went Wrong!" } = err;
+    res.render("error.ejs", { err });
 });
 
 
