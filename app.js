@@ -1,24 +1,31 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Listing = require("./models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require('ejs-mate');
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const listingSchema = require("./schema.js")
+const { listingSchema, reviewSchema } = require("./schema.js");
+const Listing = require("./models/listing.js");
+const Review = require("./models/review.js");
+
 
 const app = express();
 const PORT = 8080;
 const MONGO_URL = "mongodb://127.0.0.1:27017/staynest";
 
+//MiddleWares and View Settings.
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+    extended: true
+}));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.engine('ejs', ejsMate);
 
+
+//Connect DB
 main()
     .then(() => {
         console.log("Database Connection Successful");
@@ -33,9 +40,19 @@ async function main() {
 
 const validateListing = (req, res, next) => {
     let { error } = listingSchema.validate(req.body);
-    console.log(req.body); 
     if (error) {
-        let errMssg = error.details.map((el) => el.message).join(",");
+        let errMssg = error.details.map((el) => el.message).join(", ");
+        throw new ExpressError(400, errMssg);
+    } else {
+        next();
+    }
+};
+
+
+const validateReview = (req, res, next) => {
+    let { error } = reviewSchema.validate(req.body);
+    if (error) {
+        let errMssg = error.details.map((el) => el.message).join(", ");
         throw new ExpressError(400, errMssg);
     } else {
         next();
@@ -97,6 +114,23 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
     res.redirect("/listings");
 }));
 
+
+//Reviews
+//Post Route
+app.post("/listings/:id/reviews", validateReview, wrapAsync(async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+
+    listing.reviews.push(newReview);
+
+    await newReview.save();
+    await listing.save();
+
+    res.redirect(`/listings/${listing._id}`);
+    res.send("Works");
+}));
+
+
 //404 Route
 app.all("*", (req, res, next) => {
     next(new ExpressError(404, "Page Not Found."));
@@ -104,10 +138,8 @@ app.all("*", (req, res, next) => {
 
 //Error MiddleWare
 app.use((err, req, res, next) => {
-    // let { statusCode = 500, message = "Something Went Wrong!" } = err;
-    res.render("error.ejs", { err });
+    res.status(err.statusCode).render("error.ejs", { err });
 });
-
 
 app.listen(PORT, () => {
     console.log(`Listening on Port: ${PORT}`);
