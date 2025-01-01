@@ -1,6 +1,4 @@
-const { string, number } = require("joi");
 const mongoose = require("mongoose");
-const { type } = require("../schema");
 const Schema = mongoose.Schema;
 
 
