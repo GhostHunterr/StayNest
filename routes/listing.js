@@ -30,7 +30,12 @@ router.get("/new", (req, res) => {
 router.get("/:id", wrapAsync(async (req, res) => {
     const { id } = req.params;
     const listing = await Listing.findById(id).populate("reviews");
-    res.render("listings/show.ejs", { listing });
+    if (!listing) {
+        req.flash("error", "Listing you requested Doesn't Exist");
+        res.redirect("/listings");
+    } else {
+        res.render("listings/show.ejs", { listing });
+    }
 }));
 
 //Create Route
@@ -38,6 +43,7 @@ router.post("/", validateListing, wrapAsync(async (req, res, next) => {
     //sending data as a key-value pair.
     const newListing = new Listing(req.body.listing);
     await newListing.save();
+    req.flash("success", "New Listing Created!");
     res.redirect("/listings");
 }));
 
@@ -45,13 +51,20 @@ router.post("/", validateListing, wrapAsync(async (req, res, next) => {
 router.get("/:id/edit", wrapAsync(async (req, res) => {
     const { id } = req.params;
     const listing = await Listing.findById(id);
-    res.render("listings/edit.ejs", { listing });
+    if (!listing) {
+        req.flash("error", "Listing you requested Doesn't Exist");
+        res.redirect("/listings");
+    } else {
+        res.render("listings/edit.ejs", { listing });
+    }
 }));
 
 //Update Route
 router.put("/:id", validateListing, wrapAsync(async (req, res) => {
     const { id } = req.params;
     const listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+
+    req.flash("success", "Listing Updated Successfully!");
     res.redirect(`/listings/${id}`);
 }));
 
@@ -59,6 +72,7 @@ router.put("/:id", validateListing, wrapAsync(async (req, res) => {
 router.delete("/:id", wrapAsync(async (req, res) => {
     const { id } = req.params;
     await Listing.findByIdAndDelete(id);
+    req.flash("success", "Listing Deleted Successfully!");
     res.redirect("/listings");
 }));
 
