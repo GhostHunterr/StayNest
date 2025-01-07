@@ -30,5 +30,16 @@ router.get("/login", (req, res) => {
 router.post("/login", passport.authenticate('local', { failureRedirect: "/login", failureFlash: true }), wrapAsync(async (req, res) => {
     req.flash("success", "Welcome Back to StayNest");
     res.redirect("/listings")
-}))
+}));
+
+router.get("/logout", (req, res, next) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        req.flash("success", "You are Logged Out.");
+        res.redirect("/listings");
+    });
+});
+
 module.exports = router;
