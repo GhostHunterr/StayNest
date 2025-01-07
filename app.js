@@ -6,11 +6,16 @@ const methodOverride = require("method-override");
 const ejsMate = require('ejs-mate');
 const session = require("express-session");
 const flash = require("connect-flash");
-
-//Files
 const ExpressError = require("./utils/ExpressError.js");
-const listings = require("./routes/listing.js");
-const reviews = require("./routes/review.js");
+const wrapAsync = require("./utils/wrapAsync.js");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
+
+//Routes
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
 
 const app = express();
 const PORT = 8080;
@@ -38,6 +43,11 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
@@ -58,16 +68,24 @@ async function main() {
     await mongoose.connect(MONGO_URL);
 }
 
-//Root
-app.get("/", (req, res) => {
-    res.send("Root is working.");
-});
+app.get("/demouser", wrapAsync(async (req, res) => {
+    let fakeUser = new User({
+        email: "farhan@gmail.com",
+        username: "Farhan"
+    });
+
+    const registeredUser = await User.register(fakeUser, "helloworld");
+    res.send(registeredUser);
+}));
 
 //Listings
-app.use("/listings", listings);
+app.use("/listings", listingRouter);
 
 //Reviews
-app.use("/listings/:id/reviews", reviews);
+app.use("/listings/:id/reviews", reviewRouter);
+
+//User
+app.use("/", userRouter);
 
 //404 Route
 app.all("*", (req, res, next) => {
