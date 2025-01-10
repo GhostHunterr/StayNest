@@ -29,7 +29,7 @@ router.post("/signup", wrapAsync(async (req, res) => {
 }));
 
 router.get("/login", (req, res) => {
-    // req.session.redirectUrl = "";
+    req.session.redirectUrl = "";
     res.render("users/login.ejs");
 });
 
