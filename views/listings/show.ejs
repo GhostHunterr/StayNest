@@ -81,7 +81,7 @@
                                                     <%= review.rating %> Stars!
                                                 </p>
                                             </div>
-                                            <% if(review.author._id.equals(currUser._id)) {%>
+                                            <% if(currUser && review.author._id.equals(currUser._id)) {%>
                                                 <form method="post"
                                                     action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
                                                     <button class="btn btn-sm btn-dark mb-2">Delete</button>
