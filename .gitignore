@@ -4,3 +4,5 @@ node_modules/
 # Workspace Settings
 .vscode/
 
+# .env
+.env
