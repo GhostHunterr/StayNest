@@ -37,18 +37,18 @@ app.engine('ejs', ejsMate);
 const store = MongoStore.create({
     mongoUrl: MONGO_URL,
     crypto: {
-        secret: "SuperSecretCode"
+        secret: process.env.SECRET
     },
     touchAfter: 24 * 3600,
 });
 
-store.on("error", ()=>{
+store.on("error", (err) => {
     console.log("ERROR IN MONGO SESSION STORE", err);
 })
 
 const sessionOptions = {
     store: store,
-    secret: "SuperSecretCode",
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
