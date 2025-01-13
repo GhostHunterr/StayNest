@@ -104,8 +104,6 @@ app.use("/", userRouter);
 //404 Route
 app.all("*", (req, res, next) => {
     res.status(404).render("404.ejs")
-    // next();
-    // next(new ExpressError(404, "Page Not Found."));
 });
 
 //Error MiddleWare
