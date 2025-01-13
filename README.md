@@ -72,13 +72,8 @@ To set up the project locally:
    ```
 
 3. Populate the database:
-   - Navigate to the `init` folder:
      ```bash
-     cd init
-     ```
-   - Run the `index.js` file to populate the database with initial data:
-     ```bash
-     node index.js
+     npm run initdb
      ```
 
 4. Create a `.env` file with the following variables:
@@ -92,10 +87,16 @@ To set up the project locally:
 
 5. Start the development server:
    ```bash
+   npm run dev
+   ```
+   OR
+   
+6. Start the Production server:
+   ```bash
    npm start
    ```
 
-6. Visit the application at `http://localhost:8080`.
+7. Visit the application at `http://localhost:8080`.
 
 ---
 
