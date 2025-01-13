@@ -24,6 +24,8 @@ const userRouter = require("./routes/user.js");
 const app = express();
 const PORT = 8080;
 const MONGO_URL = process.env.ATLASDB_URL;
+// const MONGO_URL = "mongodb://127.0.0.1:27017/staynest";
+
 
 //MiddleWares and View Settings.
 app.set("view engine", "ejs");
@@ -87,6 +89,12 @@ main()
 async function main() {
     await mongoose.connect(MONGO_URL);
 }
+
+
+//Root
+app.use("/", (req, res) => {
+    res.redirect("/listings")
+});
 
 //Listings
 app.use("/listings", listingRouter);
