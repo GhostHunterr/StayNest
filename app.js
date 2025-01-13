@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV != "production"){
+if (process.env.NODE_ENV != "production") {
     require("dotenv").config();
 }
 
@@ -9,6 +9,7 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require('ejs-mate');
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const ExpressError = require("./utils/ExpressError.js");
 const passport = require("passport");
@@ -22,7 +23,7 @@ const userRouter = require("./routes/user.js");
 
 const app = express();
 const PORT = 8080;
-const MONGO_URL = "mongodb://127.0.0.1:27017/staynest";
+const MONGO_URL = process.env.ATLASDB_URL;
 
 //MiddleWares and View Settings.
 app.set("view engine", "ejs");
@@ -32,7 +33,21 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.engine('ejs', ejsMate);
 
+
+const store = MongoStore.create({
+    mongoUrl: MONGO_URL,
+    crypto: {
+        secret: "SuperSecretCode"
+    },
+    touchAfter: 24 * 3600,
+});
+
+store.on("error", ()=>{
+    console.log("ERROR IN MONGO SESSION STORE", err);
+})
+
 const sessionOptions = {
+    store: store,
     secret: "SuperSecretCode",
     resave: false,
     saveUninitialized: true,
@@ -42,6 +57,7 @@ const sessionOptions = {
         httpOnly: true
     }
 };
+
 
 app.use(session(sessionOptions));
 app.use(flash());
