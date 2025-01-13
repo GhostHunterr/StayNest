@@ -17,4 +17,10 @@ router
 
 router.get("/logout", userController.logout);
 
+router
+    .route("/")
+    .get((req, res) => {
+        res.redirect("/listings");
+    });
+
 module.exports = router;

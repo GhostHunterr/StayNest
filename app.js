@@ -91,10 +91,6 @@ async function main() {
 }
 
 
-//Root
-app.use("/", (req, res) => {
-    res.redirect("/listings")
-});
 
 //Listings
 app.use("/listings", listingRouter);
