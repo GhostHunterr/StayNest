@@ -4,7 +4,7 @@ StayNest is a full-stack web application designed to help users find and manage 
 
 ## 🚀 Live Demo
 
-**[StayNest Live Demo](https://stay-nest-nkoy.onrender.com/)**
+**[StayNest Live Demo](https://staynest-zdkf.onrender.com/)**
 
 ---
 
